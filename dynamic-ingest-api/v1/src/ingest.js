@@ -168,3 +168,79 @@
  *    ]
  *
  */
+
+ // Get S3 URLs
+
+  /**
+  * @api {get} /accounts/:account_id/videos/:video_id/upload-urls/:source_name Get S3 URLs
+  * @apiName Get S3 URLs
+  * @apiGroup Ingest
+  * @apiVersion 1.0.0
+  *
+  * @apiDescription Get temporary S3 URLs to upload source files for ingestion into Video Cloud. See [Source File Upload](https://support.brightcove.com/source-file-upload-api-dynamic-ingest) for more information. **NOTE that before you ingest a new video, you must first make a [Create Video request](https://brightcovelearning.github.io/Brightcove-API-References/cms-api/v1/doc/index.html#api-videoGroup-Create_Video).**
+  *
+  * @apiHeader {String} Content-Type Content-Type: application/json
+  * @apiHeader {String} Authorization Authorization: Bearer access_token (see [Getting Access Tokens](https://support.brightcove.com/node/17925))
+  *
+  * @apiParam (Path Parameters) {String} account_id Video Cloud account ID.
+  * @apiParam (Path Parameters) {Number} video_id Video Cloud video ID; if this is a new video ingest, the ID will be the one returned by the _Create Video_ request
+  * @apiParam (Path Parameters) {String} source_name the video source filename - **the name should not contain any URL-reserved characters such as ?, &, # or spaces**
+  *
+  * @apiParamExample {json} Get S3 URLS Example:
+  *    https://ingest.api.brightcove.com/v1/accounts/57838016001/videos/67909129001/upload-urls/greatblueheron.mp4
+  *
+  * @apiSuccess (Response Fields) {String} bucket  the S3 bucket name
+  * @apiSuccess (Response Fields) {String} object_key the access key used for authenticating the upload request (used for multipart uploads)
+  * @apiSuccess (Response Fields) {String} access_key_id the access key used for authenticating the upload request (used for multipart uploads)
+  * @apiSuccess (Response Fields) {String} secret_access_key the secret access key used for authenticating the upload request (used for multipart uploads)
+  * @apiSuccess (Response Fields) {String} session_token the secret access key used for authenticating the upload request (used for multipart uploads)
+  * @apiSuccess (Response Fields) {String} SignedUrl this is a shorthand S3 url that you can PUT your source file(s) to if you have relatively small videos and are not implementing multipart upload
+  * @apiSuccess (Response Fields) {String} ApiRequestUrl this is the URL you will include in your Dynamic Ingest POST request for the Master url or url for the image/text_tracks assets
+  *
+  * @apiSuccessExample {json} Success Response:
+  *    HTTP/1.1 200 OK
+  *    {
+  *    	    "bucket": "ingestion-upload-production",
+  *    	    "object_key": "57838016001/67909129001/194ed2d1-cd57-420d-9139-58ed655ba70f/greatblueheron.mp4",
+  *    	    "access_key_id": "ASIAI6IWBNY3QPOKC55A",
+  *    	    "secret_access_key": "DXzr3VYcpMpH1Qg5JZ3qFRw3gRFdi3jAoxiUQtR0",
+  *    	    "session_token": "FQoDYXdzEI///////////wEaDNnYCOYcjTzSp6seNyKMA5pkuYrKv2+oSVDI/I4xLqGg5Mc7ORWqTT1Bn72VdzqvxkbA8i/2xaOKNSYzF/ceyTAb3Bp43jah4s/mn2MqkurXPL0dfP0KzVOUAsg7Xdt9JIstycn6mhp0rhf6Qm0Rq7GGXiCchb1KF4TV33fNKZSq8+/4oGKK55LfW+lqWF8a+24Pk5x2aEeSUCFSWIHEkAyj2rBzmIYR9TyjJhe1hE8eoTZKvovz5o5S86mEr4apg77ibrMUyYHTbDTvGVr9NVmNwXQR4vbaKKzhpL6CII0RZ9PHApGbLkg78w5EWGM2MLmTfIjvkq+WWztG2DybSCjmx7c+za6rNMKDgouKTvkHnJbqqsmTlPuhFmzIkIF3e6cYZLHl3q8ku7dk46YJPWK0BwZaNxjfMyIWM93BNPQBwLJlwSMaYZsWadSjWOyBn/w/p/BtP/haKQGYMVcOFrYKdnjY5SeGTruOmHdfRKnPQAtmoB5aroxnD3d7maFdnc/2/FZoybnp1nrw9uyGa8yiPHpqCENFCm3T3iiuof/NBQ==",
+  *    	    "signed_url": "https://ingestion-upload-production.s3.amazonaws.com/57838016001/67909129001/194ed2d1-cd57-420d-9139-58ed655ba70f/greatblueheron.mp4?AWSAccessKeyId=AKIAJZKRHWB4FUFMCPPA&Expires=1505829422&Signature=PKxh8SqQVtxVONt41tLSh6WSvnk%3D",
+  *    	    "api_request_url": "https://ingestion-upload-production.s3.amazonaws.com/57838016001/67909129001/194ed2d1-cd57-420d-9139-58ed655ba70f/greatblueheron.mp4"
+  *    }
+  *
+  * @apiError (Error 4xx) {json} UNAUTHORIZED 401: Authentication failed; check to make sure your client credentials were correct for the access token
+  * @apiError (Error 4xx) {json} RESOURCE_NOT_FOUND 404: The api couldn't find the resource you requested
+  * @apiError (Error 4xx) {json} UNAUTHORIZED 403: Unable to authorize request.
+  * @apiError (Error 4xx) {json} TOO_MANY_REQUESTS 429: You are submitting too many simultaneous requests or too many requests per second
+  * @apiError (Error 5xx) {json} INTERNAL_ERROR 500: Internal error, please try again later
+  *
+  * @apiErrorExample {json} 404 Error Response
+  *     HTTP/1.1 404 Not Found
+  *     [
+  *         {
+  *             "error_code": "RESOURCE_NOT_FOUND"
+  *         }
+  *     ]
+  *
+  *
+  * @apiErrorExample {json} 404 Not Found
+  *    HTTP/1.1 404 Not Found
+  *    [
+  *        {
+  *            "error_code": "NO_SUCH_VIDEO",
+  *            "message": "Unable to find the referenced video."
+  *        }
+  *    ]
+  *
+  * @apiErrorExample 403 Forbidden
+  *    HTTP/1.1 403 Forbidden
+  *    [
+  *        {
+  *            "error_code": "UNAUTHORIZED",
+  *            "message": "Unable to authorize request."
+  *        }
+  *    ]
+  *
+  *
+  */

@@ -14,21 +14,47 @@
   * @apiParam (Request Body Fields) {Object} application_ad_configuration The ad configuration object
   * @apiParam (Request Body Fields) {String} application_ad_configuration.ad_configuration_description Human readable description of the configuration.
   * @apiParam (Request Body Fields) {String="Dfp","Vast","SmartXML"} application_ad_configuration.ad_configuration_expected_response_type The expected response type based on your ad server
+  * @apiParam (Request Body Fields) {Object} [application_ad_configuration.ad_configuration_headers] An optional JSON object that can contain zero or more key-value-pairs, for which both key and value must be strings.  All of the standard URL substitutions are valid for headers.
   * @apiParam (Request Body Fields) {String="SingleAdResponse","MultipleAdResponse"} application_ad_configuration.ad_configuration_strategy Specifies whether ad breaks should include single or muliple ads
   * @apiParam (Request Body Fields) {Object[]} application_ad_configuration.ad_configuration_transforms Array of ad configuration transforms.
   * @apiParam (Request Body Fields) {String} application_ad_configuration.ad_configuration_transforms.xpath xpath for the transform.
   * @apiParam (Request Body Fields) {String} application_ad_configuration.ad_configuration_transforms.xslt xslt stylesheet for the transform.
   * @apiParam (Request Body Fields) {String} ad_configuration_url_format Format for the ad tag - see [SSAI Using the Brightcove Live API](https://support.brightcove.com/server-side-ad-insertion-using-brightcove-live-api#ad_configuration_variables) for the available ad configuration variables.
   * @apiParam (Request Body Fields) {String} application_description Human readable description of the ad application.
-  * @apiParam (Request Body Fields) {String} [account_id] Your account id.
+  * @apiParam (Request Body Fields) {String} [account_id] Your Live account id (if you leave this blank, the request will still work).
   * @apiParam (Request Body Fields) {Number} application_segment_buffer The amount of ad content to buffer, in seconds.
   *
-  * @apiParamExample {json} Create an ad configuration example:
+  * @apiParamExample {json} Create an ad configuration (single ad response) example:
   *    {
   *        "application_ad_configuration": {
   *            "ad_configuration_description": "Human readable description of the configuration",
-  *            "ad_configuration_expected_response_type": "Dfp/Vast/SmartXML",
-  *            "ad_configuration_strategy": "SingleAdResponse/MultipleAdResponse",
+  *            "ad_configuration_expected_response_type": "Vast",
+  *            "ad_configuration_headers": {
+  *                "X-Custom-Header-Rand": "{{random.int32}}",
+  *                "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+  *            },
+  *            "ad_configuration_strategy": "SingleAdResponse",
+  *            "ad_configuration_transforms": [
+  *            {
+  *                "xpath": "/",
+  *                "xslt": "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"><xsl:output omit-xml-declaration=\"yes\"/><xsl:template match=\"node()|@*\"><xsl:copy><xsl:apply-templates select=\"node()|@*\"/></xsl:copy></xsl:template></xsl:stylesheet>"
+  *            }],
+  *            "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&num={{random.int32}}&ses={{session.session_id}}"
+  *        },
+  *        "application_description": "Human readable description of the ad application",
+  *        "account_id": "USER'S ACCOUNT ID" [Optional - When omitted, Account ID of requesting user is used]
+  *    }
+  *
+  * @apiParamExample {json} Create an ad configuration (multiple ad response) example:
+  *    {
+  *        "application_ad_configuration": {
+  *            "ad_configuration_description": "Human readable description of the configuration",
+  *            "ad_configuration_expected_response_type": "Vast",
+  *            "ad_configuration_headers": {
+  *                "X-Custom-Header-Rand": "{{random.int32}}",
+  *                "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+  *            },
+  *            "ad_configuration_strategy": "MultipleAdResponse",
   *            "ad_configuration_transforms": [
   *            {
   *                "xpath": "/",
@@ -41,11 +67,12 @@
   *    }
   *
   * @apiSuccess (Response Fields) {Object} application The ad application object
-  * @apiSuccess (Response Fields) {String} application.account_id The account id
+  * @apiSuccess (Response Fields) {String} application.account_id The Live account id (if omitted, the request will still work)
   * @apiSuccess (Response Fields) {String} application.description The ad application description
   * @apiSuccess (Response Fields) {Object} application.application_ad_configuration The ad configuration object for the application
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_description The ad configuration description
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.response_type The ad configuration response type (`Dfp`, `Vast`, or `SmartXML`)
+  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration.headers The ad configuration headers
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_strategy The ad configuration strategy (`SingleAdResponse`, or `MultipleAdResponse`)
   * @apiSuccess (Response Fields) {Object[]} application.application_ad_configuration.ad_configuration_transforms The ad configuration transforms
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xpath The ad configuration transform xpath
@@ -62,8 +89,12 @@
   *        "application_description": "Human readable description of the ad application",
   *        "application_ad_configuration": {
   *          "ad_configuration_description": "Human readable description of the configuration",
-  *          "ad_configuration_expected_response_type": "Dfp/Vast/SmartXML,
-  *          "ad_configuration_strategy": "SingleAdResponse/MultipleAdResponse",
+  *          "ad_configuration_expected_response_type": "Vast",
+  *          "ad_configuration_headers": {
+  *                "X-Custom-Header-Rand": "{{random.int32}}",
+  *                "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+  *            },
+  *          "ad_configuration_strategy": "SingleAdResponse",
   *          "ad_configuration_transforms": [
   *            {
   *              "xpath": "/",
@@ -93,25 +124,29 @@
   * @apiHeader {String} X-API-KEY X-API-KEY: {APIKey}
   *
   * @apiParam (URL Parameters) {Object} application_id The ad application id
-  * @apiSuccess (Response Fields) {String} application.description The ad application description
-  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration The ad configuration object for the application
-  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_description The ad configuration description
-  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.response_type The ad configuration response type (`Dfp`, `Vast`, or `SmartXML`)
-  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_strategy The ad configuration strategy (`SingleAdResponse`, or `MultipleAdResponse`)
-  * @apiSuccess (Response Fields) {Object[]} application.application_ad_configuration.ad_configuration_transforms The ad configuration transforms
-  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xpath The ad configuration transform xpath
-  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xslt The ad configuration transform xslt
-  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_url_format The URL template for the ad server
-  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration.ad_configuration_variables Key/value pairs for the ad server URL template
-  * @apiSuccess (Response Fields) {String} application.application_id The ad application id
-  * @apiSuccess (Response Fields) {Boolean} inserted Whether the ad application was successfully inserted
+  * @apiParam (Request Body Fields) {Object} application_ad_configuration The ad configuration object
+  * @apiParam (Request Body Fields) {String} application_ad_configuration.ad_configuration_description Human readable description of the configuration.
+  * @apiParam (Request Body Fields) {String="Dfp","Vast","SmartXML"} application_ad_configuration.ad_configuration_expected_response_type The expected response type based on your ad server
+  * @apiParam (Request Body Fields) {Object} [application_ad_configuration.ad_configuration_headers] An optional JSON object that can contain zero or more key-value-pairs, for which both key and value must be strings.  All of the standard URL substitutions are valid for headers.
+  * @apiParam (Request Body Fields) {String="SingleAdResponse","MultipleAdResponse"} application_ad_configuration.ad_configuration_strategy Specifies whether ad breaks should include single or muliple ads
+  * @apiParam (Request Body Fields) {Object[]} application_ad_configuration.ad_configuration_transforms Array of ad configuration transforms.
+  * @apiParam (Request Body Fields) {String} application_ad_configuration.ad_configuration_transforms.xpath xpath for the transform.
+  * @apiParam (Request Body Fields) {String} application_ad_configuration.ad_configuration_transforms.xslt xslt stylesheet for the transform.
+  * @apiParam (Request Body Fields) {String} ad_configuration_url_format Format for the ad tag - see [SSAI Using the Brightcove Live API](https://support.brightcove.com/server-side-ad-insertion-using-brightcove-live-api#ad_configuration_variables) for the available ad configuration variables.
+  * @apiParam (Request Body Fields) {String} application_description Human readable description of the ad application.
+  * @apiParam (Request Body Fields) {String} [account_id] Your Live account id (if you leave this blank, the request will still work).
+  * @apiParam (Request Body Fields) {Number} application_segment_buffer The amount of ad content to buffer, in seconds.
   *
-  * @apiParamExample {json} Update an ad configuration example:
+  * @apiParamExample {json} Update an ad configuration (single ad response) example:
   *    {
   *        "application_ad_configuration": {
   *            "ad_configuration_description": "Human readable description of the configuration",
-  *            "ad_configuration_expected_response_type": "Dfp/Vast/SmartXML",
-  *            "ad_configuration_strategy": "SingleAdResponse/MultipleAdResponse",
+  *            "ad_configuration_expected_response_type": "Dfp",
+  *            "ad_configuration_headers": {
+  *                "X-Custom-Header-Rand": "{{random.int32}}",
+  *                "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+  *            },
+  *            "ad_configuration_strategy": "SingleAdResponse",
   *            "ad_configuration_transforms": [
   *            {
   *                "xpath": "/",
@@ -123,20 +158,42 @@
   *        "account_id": "USER'S ACCOUNT ID" [Optional - When omitted, Account ID of requesting user is used]
   *    }
   *
-  * @apiSuccess (Request Body Fields) {Object} application The ad application object
-  * @apiSuccess (Request Body Fields) {String} application.account_id The account id
-  * @apiSuccess (Request Body Fields) {String} application.description The ad application description
-  * @apiSuccess (Request Body Fields) {Object} application.application_ad_configuration The ad configuration object for the application
-  * @apiSuccess (Request Body Fields) {String} application.application_ad_configuration.ad_configuration_description The ad configuration description
-  * @apiSuccess (Request Body Fields) {String} application.application_ad_configuration.response_type The ad configuration response type (`Dfp`, `Vast`, or `SmartXML`)
-  * @apiSuccess (Request Body Fields) {String} application.application_ad_configuration.ad_configuration_strategy The ad configuration strategy (`SingleAdResponse`, or `MultipleAdResponse`)
-  * @apiSuccess (Request Body Fields) {Object[]} application.application_ad_configuration.ad_configuration_transforms The ad configuration transforms
-  * @apiSuccess (Request Body Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xpath The ad configuration transform xpath
-  * @apiSuccess (Request Body Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xslt The ad configuration transform xslt
-  * @apiSuccess (Request Body Fields) {String} application.application_ad_configuration.ad_configuration_url_format The URL template for the ad server
-  * @apiSuccess (Request Body Fields) {Object} application.application_ad_configuration.ad_configuration_variables Key/value pairs for the ad server URL template
-  * @apiSuccess (Request Body Fields) {String} application.application_id The ad application id
-  * @apiSuccess (Request Body Fields) {Boolean} inserted Whether the ad application was successfully inserted
+  * @apiParamExample {json} Update an ad configuration (multiple ad response) example:
+  *    {
+  *        "application_ad_configuration": {
+  *            "ad_configuration_description": "Human readable description of the configuration",
+  *            "ad_configuration_expected_response_type": "Dfp",
+  *            "ad_configuration_headers": {
+  *                "X-Custom-Header-Rand": "{{random.int32}}",
+  *                "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+  *            },
+  *            "ad_configuration_strategy": "MultipleAdResponse",
+  *            "ad_configuration_transforms": [
+  *            {
+  *                "xpath": "/",
+  *                "xslt": "<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:Det=\"http://Det.com\"><xsl:output omit-xml-declaration=\"yes\"/><xsl:template match=\"node()|@*\"><xsl:copy><xsl:apply-templates select=\"node()|@*\"/></xsl:copy></xsl:template></xsl:stylesheet>"
+  *            }],
+  *            "ad_configuration_url_format": "https://ad-provider-host.com/path/to/ad-handler?ip={{client.ipaddress}}&num={{random.int32}}&ses={{session.session_id}}"
+  *        },
+  *        "application_description": "Human readable description of the ad application",
+  *        "account_id": "USER'S ACCOUNT ID" [Optional - When omitted, Account ID of requesting user is used]
+  *    }
+  *
+  * @apiSuccess (Response Fields) {Object} application The ad application object
+  * @apiSuccess (Response Fields) {String} application.account_id The Live account id (if omitted, the request will still work)
+  * @apiSuccess (Response Fields) {String} application.description The ad application description
+  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration The ad configuration object for the application
+  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_description The ad configuration description
+  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.response_type The ad configuration response type (`Dfp`, `Vast`, or `SmartXML`)
+  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration.headers The ad configuration headers
+  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_strategy The ad configuration strategy (`SingleAdResponse`, or `MultipleAdResponse`)
+  * @apiSuccess (Response Fields) {Object[]} application.application_ad_configuration.ad_configuration_transforms The ad configuration transforms
+  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xpath The ad configuration transform xpath
+  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xslt The ad configuration transform xslt
+  * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_url_format The URL template for the ad server
+  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration.ad_configuration_variables Key/value pairs for the ad server URL template
+  * @apiSuccess (Response Fields) {String} application.application_id The ad application id
+  * @apiSuccess (Response Fields) {Boolean} inserted Whether the ad application was successfully inserted
   *
   * @apiSuccessExample {json} Success response for create ad application
   *    {
@@ -145,7 +202,11 @@
   *        "application_description": "Human readable description of the ad application",
   *        "application_ad_configuration": {
   *          "ad_configuration_description": "Human readable description of the configuration",
-  *          "ad_configuration_expected_response_type": "Dfp/Vast/SmartXML,
+  *          "ad_configuration_expected_response_type": "Dfp,
+  *          "ad_configuration_headers": {
+  *                "X-Custom-Header-Rand": "{{random.int32}}",
+  *                "X-VIDEOPLAZA-FORWARDED-FOR": "{{client.ipaddress}}"
+  *            },
   *          "ad_configuration_strategy": "SingleAdResponse/MultipleAdResponse",
   *          "ad_configuration_transforms": [
   *            {
@@ -175,7 +236,7 @@
     * @apiHeader {String} Content-Type Content-Type: application/json
     * @apiHeader {String} X-API-KEY X-API-KEY: {APIKey}
     *
-    * @apiParam (Request Body Fields) {Object} account_id The account id
+    * @apiParam (URL Parameters) {Object} [account_id] The Live account id (if you leave this out, request will still work)
     *
     *
     * @apiSuccess (Response Fields) {Object} application The ad application object
@@ -184,6 +245,7 @@
     * @apiSuccess (Response Fields) {Object} application.application_ad_configuration The ad configuration object for the application
     * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_description The ad configuration description
     * @apiSuccess (Response Fields) {String} application.application_ad_configuration.response_type The ad configuration response type (`Dfp`, `Vast`, or `SmartXML`)
+    * @apiSuccess (Response Fields) {Object} application.application_ad_configuration.headers The ad configuration headers
     * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_strategy The ad configuration strategy (`SingleAdResponse`, or `MultipleAdResponse`)
     * @apiSuccess (Response Fields) {Object[]} application.application_ad_configuration.ad_configuration_transforms The ad configuration transforms
     * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xpath The ad configuration transform xpath
@@ -251,6 +313,7 @@
   * @apiSuccess (Response Fields) {Object} application.application_ad_configuration The ad configuration object for the application
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_description The ad configuration description
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.response_type The ad configuration response type (`Dfp`, `Vast`, or `SmartXML`)
+  * @apiSuccess (Response Fields) {Object} application.application_ad_configuration.headers The ad configuration headers
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_strategy The ad configuration strategy (`SingleAdResponse`, or `MultipleAdResponse`)
   * @apiSuccess (Response Fields) {Object[]} application.application_ad_configuration.ad_configuration_transforms The ad configuration transforms
   * @apiSuccess (Response Fields) {String} application.application_ad_configuration.ad_configuration_transforms.xpath The ad configuration transform xpath
@@ -320,7 +383,7 @@
   * @apiHeader {String} X-API-KEY X-API-KEY: {APIKey}
   *
   * @apiParam (Request Body Fields) {String} source_url URL for the slate to ingest
-  * @apiParam (Request Body Fields) {String} account_id The account id
+  * @apiParam (Request Body Fields) {String} account_id The Live account id (if left blank, the request will still work)
   * @apiParam (Request Body Fields) {String} [source_description] User identifiable description for the slate
   *
   * @apiParamExample {json} Ingest Slate Media Source Asset example:

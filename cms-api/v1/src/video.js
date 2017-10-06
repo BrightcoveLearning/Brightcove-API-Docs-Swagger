@@ -42,6 +42,7 @@
  * @apiSuccess (Response Fields) {Number} cue_points.time time of the cue point in seconds; example: 10.527
  * @apiSuccess (Response Fields) {String} cue_points.metadata=null optional metadata string (128 single-byte characters maximum)
  * @apiSuccess (Response Fields) {Boolean} cue_points.force-stop=false whether video is force-stopped at the cue point
+ * @apiSuccess (Response Fields) {String} delivery_type video delivery type - `remote`, `static_origin`, `dynamic_origin` or `unknown`
  * @apiSuccess (Response Fields) {String} description video short description
  * @apiSuccess (Response Fields) {Number} duration video duration in milliseconds
  * @apiSuccess (Response Fields) {String} digital_master_id asset id of the digital master
@@ -299,6 +300,7 @@
  * @apiSuccess (Response Fields) {Number} cue_points.time time of the cue point in seconds; example: 10.527
  * @apiSuccess (Response Fields) {String} cue_points.metadata=null optional metadata string (128 single-byte characters maximum)
  * @apiSuccess (Response Fields) {Boolean} cue_points.force-stop=false whether video is force-stopped at the cue point
+ * @apiSuccess (Response Fields) {String} delivery_type video delivery type - `remote`, `static_origin`, `dynamic_origin` or `unknown`
  * @apiSuccess (Response Fields) {String} description video short description
  * @apiSuccess (Response Fields) {Number} duration video duration in milliseconds
  * @apiSuccess (Response Fields) {String} digital_master_id asset id of the digital master
@@ -895,6 +897,58 @@
  *
  */
 
+ // delete digital master
+
+ /**
+  * @api {delete} /accounts/:account_id/videos/:video_id/digital_master Delete Digital Master
+  * @apiName Delete Digital Master
+  * @apiGroup videoGroup
+  * @apiVersion 1.0.0
+  *
+  * @apiDescription Deletes the archived digital master for a video. **Be sure to read [Digital Master Delete API](https://support.brightcove.com/digital-master-delete-api) before using this operation** to understand the implications.
+  *
+  * @apiHeader {String} Content-Type Content-Type: application/json
+  * @apiHeader {String} Authorization Authorization: Bearer access_token (see [Getting Access Tokens](https://support.brightcove.com/node/17925))
+  *
+  * @apiParam (Path Parameters) {String} account_id Video Cloud account ID.
+  * @apiParam (Path Parameters) {String} video_id Video Cloud video ID. You can also use `ref:reference_id`
+  *
+  *
+  * @apiParamExample {Url} Delete Digital Master Example:
+  *     https://cms.api.brightcove.com/v1/accounts/57838016001/videos/4077874616001/digital_master
+  *
+  * @apiSuccessExample {json} Success Response:
+  *    HTTP/1.1 204 NO CONTENT
+  *
+  * @apiError (Error 4xx) {json} UNAUTHORIZED 401: Authentication failed; check to make sure your client credentials were correct for the access token
+  * @apiError (Error 4xx) {json} RESOURCE_NOT_FOUND 404: The api couldn't find the resource you requested
+  * @apiError (Error 4xx) {json} METHOD_NOT_ALLOWED 405: The HTTP method specified is not allowed for this endpoint
+  * @apiError (Error 4xx) {json} NOT_AVAILABLE 403: The resource you are requesting is temporarily unavailable
+  * @apiError (Error 4xx) {json} TOO_MANY_REQUESTS 429: You are submitting too many simultaneous requests or too many requests per second
+  * @apiError (Error 5xx) {json} UNKNOWN 500: Issue in Brightcove system; try again later.
+  * @apiError (Error 5xx) {json} TIMEOUT 500: Server likely too busy; try again later.
+  *
+  * @apiErrorExample {json} 401 UNAUTHORIZED
+  *     HTTP/1.1 401 UNAUTHORIZED
+  *     [
+  *         {
+  *             "error_code": "UNAUTHORIZED",
+  *             "message": "Permission denied."
+  *         }
+  *     ]
+  *
+  * @apiErrorExample {json} 404 Error Response
+  *     HTTP/1.1 404 Not Found
+  *     [
+  *         {
+  *             "error_code": "RESOURCE_NOT_FOUND"
+  *         }
+  *     ]
+  *
+  *
+  */
+
+
 // get playlist references
 
  /**
@@ -1026,12 +1080,12 @@
   * @apiParam (Request Body Fields) {Object} [custom_fields={}] map of fieldname-value pairs; values have a maximum length of 1024 single-byte characters
   * @apiParam (Request Body Fields) {Object[]} [cue_points="[]"] array of cue point maps
   * @apiParam (Request Body Fields) {String} [cue_points.name] cue point name
-  * @apiParam (Request Body Fields) {String="AD","CODE"} [cue_points.type=AD] cue point type
+  * @apiParam (Request Body Fields) {String="AD","CODE"} cue_points.type cue point type
   * @apiParam (Request Body Fields) {Number} cue_points.time time of the cue point in seconds; example: 10.527
   * @apiParam (Request Body Fields) {String} [cue_points.metadata=null] optional metadata string (128 single-byte characters maximum)
   * @apiParam (Request Body Fields) {Boolean} [cue_points.force-stop=false] whether video is force-stopped at the cue point
   * @apiParam (Request Body Fields) {Object} [geo={}] map of geo-filtering properties
-  * @apiParam (Request Body Fields) {String[]} [geo.countries=null] array of [ISO 3166 list of 2-letter codes __in lower-case__](https://www.iso.org/obp/ui/#home) (search for "country codes")
+  * @apiParam (Request Body Fields) {String[]} [geo.countries=null] array of [ISO 3166 list of 2- or 4-letter codes __in lower-case__](https://www.iso.org/obp/ui/#home) (search for "country codes")
   * @apiParam (Request Body Fields) {Boolean} [geo.exclude_countries=false] if true, country array is treated as a list of countries excluded from viewing
   * @apiParam (Request Body Fields) {Boolean} [geo.restricted=false] whether geo-restriction is enabled for this video
   * @apiParam (Request Body Fields) {Object} [schedule={}] map of scheduling properties
@@ -1066,6 +1120,7 @@
   * @apiSuccess (Response Fields) {Number} cue_points.time time of the cue point in seconds; example: 10.527
   * @apiSuccess (Response Fields) {String} cue_points.metadata=null optional metadata string (128 single-byte characters maximum)
   * @apiSuccess (Response Fields) {Boolean} cue_points.force-stop=false whether video is force-stopped at the cue point
+  * @apiSuccess (Response Fields) {String} delivery_type video delivery type - `remote`, `static_origin`, `dynamic_origin` or `unknown`
   * @apiSuccess (Response Fields) {String} description video short description
   * @apiSuccess (Response Fields) {Number} duration video duration in milliseconds
   * @apiSuccess (Response Fields) {String} digital_master_id asset id of the digital master
@@ -1232,12 +1287,12 @@
  * @apiParam (Request Body Fields) {Object} [custom_fields={}] map of fieldname-value pairs; values have a maximum length of 1024 single-byte characters
  * @apiParam (Request Body Fields) {Object[]} [cue_points="[]"] array of cue point maps
  * @apiParam (Request Body Fields) {String} [cue_points.name] cue point name
- * @apiParam (Request Body Fields) {String="AD","CODE"} [cue_points.type=AD] cue point type
+ * @apiParam (Request Body Fields) {String="AD","CODE"} cue_points.type cue point type
  * @apiParam (Request Body Fields) {Number} cue_points.time time of the cue point in seconds; example: 10.527
  * @apiParam (Request Body Fields) {String} [cue_points.metadata=null] optional metadata string (128 single-byte characters maximum)
  * @apiParam (Request Body Fields) {Boolean} [cue_points.force-stop=false] whether video is force-stopped at the cue point
  * @apiParam (Request Body Fields) {Object} [geo={}] map of geo-filtering properties
- * @apiParam (Request Body Fields) {String[]} [geo.countries=null] array of [ISO 3166 list of 2-letter codes __in lower-case__](https://www.iso.org/obp/ui/#home) (search for "country codes")
+ * @apiParam (Request Body Fields) {String[]} [geo.countries=null] array of [ISO 3166 list of 2- or 4-letter codes __in lower-case__](https://www.iso.org/obp/ui/#home) (search for "country codes")
  * @apiParam (Request Body Fields) {Boolean} [geo.exclude_countries=false] if true, country array is treated as a list of countries excluded from viewing
  * @apiParam (Request Body Fields) {Boolean} [geo.restricted=false] whether geo-restriction is enabled for this video
  * @apiParam (Request Body Fields) {Object} [link={}] map of scheduling properties
@@ -1284,6 +1339,7 @@
  * @apiSuccess (Response Fields) {Number} cue_points.time time of the cue point in seconds; example: 10.527
  * @apiSuccess (Response Fields) {String} cue_points.metadata=null optional metadata string (128 single-byte characters maximum)
  * @apiSuccess (Response Fields) {Boolean} cue_points.force-stop=false whether video is force-stopped at the cue point
+ * @apiSuccess (Response Fields) {String} delivery_type video delivery type - `remote`, `static_origin`, `dynamic_origin` or `unknown`
  * @apiSuccess (Response Fields) {String} description video short description
  * @apiSuccess (Response Fields) {Number} duration video duration in milliseconds
  * @apiSuccess (Response Fields) {String} digital_master_id asset id of the digital master

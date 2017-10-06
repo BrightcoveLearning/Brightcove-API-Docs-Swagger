@@ -13,10 +13,11 @@
  *
  * @apiParam (Request Body Fields) {Boolean} live_stream Indicates that the job is a live streaming job.
  * @apiParam (Request Body Fields) {Boolean} [ad_insertion=false] Setting this parameter to true will enable server side ad insertion (SSAI) on the job. Current support includes, DFP, Freewheel, or any VAST 2.0/3.0 ad tags.
- * @apiParam (Request Body Fields) {String} region AWS region list specified for the account.
+ * @apiParam (Request Body Fields) {String="us-west-1", "us-west-2","us-east-1","us-east-2", "eu-west-1", "eu-west-2", "ap-southeast-2", "ap-northeast-1","ap-southeast-1", "eu-central-1", "sa-east-1", "ap-south-1"} region AWS region - you can also specify region as the alias for a list set up for the account by Brightcove Support.
  * @apiParam (Request Body Fields) {String} [beacon_set] ID for a beacon set (for SSAI only).
- * @apiParam (Request Body Fields) {Number{1-1800}} [reconnect_time=30] The time, in seconds, to wait for a stream to reconnect to the encoder. If the reconnect time passes without the stream reconnecting, the job will automatically finish. To prevent job from finishing unless you manually cancel it, set `reconnect_time` to `0`
+ * @apiParam (Request Body Fields) {Number{1-1800}} [reconnect_time=30] The time, in seconds, to wait for a stream to reconnect to the encoder. If the reconnect time passes without the stream reconnecting, the job will automatically finish.
  * @apiParam (Request Body Fields) {String} [slate] Id for a set of slate assets
+ * @apiParam (Request Body Fields) {Boolean} [static=false] Whether this is a static entry point (SEP) job
  * @apiParam (Request Body Fields) {Object} [encryption] Encryption to apply to the stream.
  * @apiParam (Request Body Fields) {String="aes-128"} encryption.method The encryption method to use.
  * @apiParam (Request Body Fields) {String="internal","external"} encryption.type The encryption type, depending on whether an internal or external key server will be used.
@@ -26,7 +27,7 @@
  * @apiParam (Request Body Fields) {Number} [encryption.rotate_every=10] Interval for key rotation in video segments
  * @apiParam (Request Body Fields) {String} [encryption.external_url] The URL for the external encryption key - this field is required if you specify `type` as `external`, and the external key must match the `key` value
  * @apiParam (Request Body Fields) {Number{0-93600}} [event_length=0] The minimum time, in seconds, to keep a live stream available. At any point within the specified event_length you may reconnect to your stream. The event_length setting goes into effect as soon as streaming begins.
- * @apiParam (Request Body Fields) {Number{0-7200}} [live_sliding_window_duration=100] The time, in seconds, to keep in the live DVR manifest. If the stream duration is longer than the window duration, segment references will be removed first in first out. Default is 100 seconds.
+ * @apiParam (Request Body Fields) {Number{1-7200}} [live_sliding_window_duration=100] The time, in seconds, to keep in the live DVR manifest. If the stream duration is longer than the window duration, segment references will be removed first in first out. Default is 100 seconds.
  * @apiParam (Request Body Fields) {Number{1-5}} [max_hls_protocol_version=3] Sets the maximum HLS protocol version to use. Special features will be used as available. Default is 3.
  * @apiParam (Request Body Fields) {mixed[]} [notifications] Array of notification destination objects or strings.  A notification will be sent to the destination when selected event occurs. You can use a simple string with a url: "http://log:pass@httpbin.org/post", or you can use an object.
  * @apiParam (Request Body Fields) {String} notifications.url Destination for the notification.
@@ -786,7 +787,7 @@
  // Stop Live Job
 
  /**
-  * @api {put} /v1/jobs/:jobId/cancel Stop a Live Job
+  * @api {put} /v1/jobs/:jobId/cancel Stop Live Job
   * @apiName Stop Live Job
   * @apiGroup Live_Jobs
   * @apiVersion 1.0.0
@@ -802,6 +803,62 @@
   *     https://api.bcovlive.io/v1/jobs/3158f1c9bc5c462182079f434ba4ae0a/cancel
   *
   * @apiSuccess (Response Fields) {String} id The job id for the stream that was stopped
+  *
+  * @apiSuccessExample {json} Success Response Stop a Live Stream:
+  *    HTTP/1.1 200 OK
+  *    {
+  *        "id": "3158f1c9bc5c462182079f434ba4ae0a"
+  *    }
+  *
+  */
+
+ // Activate SEP Stream
+
+ /**
+  * @api {put} /v1/jobs/:jobId/activate Activate SEP Stream
+  * @apiName Activate SEP Stream
+  * @apiGroup Live_Jobs
+  * @apiVersion 1.0.0
+  *
+  * @apiDescription Activate SEP (static entry point) Stream
+  *
+  * @apiHeader {String} Content-Type Content-Type: application/json
+  * @apiHeader {String} X-API-KEY X-API-KEY: {APIKey}
+  *
+  * @apiParam (URL Parameters) {String} jobId The job id for the stream you want to activate.
+  *
+  * @apiParamExample {url} Activate SEP Job Example:
+  *     https://api.bcovlive.io/v1/jobs/3158f1c9bc5c462182079f434ba4ae0a/activate
+  *
+  * @apiSuccess (Response Fields) {String} id The job id for the stream that was activated
+  *
+  * @apiSuccessExample {json} Success Response Stop a Live Stream:
+  *    HTTP/1.1 200 OK
+  *    {
+  *        "id": "3158f1c9bc5c462182079f434ba4ae0a"
+  *    }
+  *
+  */
+
+ // Deactivate SEP Stream
+
+ /**
+  * @api {put} /v1/jobs/:jobId/deactivate Deactivate SEP Stream
+  * @apiName Deactivate SEP Stream
+  * @apiGroup Live_Jobs
+  * @apiVersion 1.0.0
+  *
+  * @apiDescription Deactivate SEP (static entry point) Stream
+  *
+  * @apiHeader {String} Content-Type Content-Type: application/json
+  * @apiHeader {String} X-API-KEY X-API-KEY: {APIKey}
+  *
+  * @apiParam (URL Parameters) {String} jobId The job id for the stream you want to deactivate.
+  *
+  * @apiParamExample {url} Deactivate SEP Job Example:
+  *     https://api.bcovlive.io/v1/jobs/3158f1c9bc5c462182079f434ba4ae0a/deactivate
+  *
+  * @apiSuccess (Response Fields) {String} id The job id for the stream that was Deactivated
   *
   * @apiSuccessExample {json} Success Response Stop a Live Stream:
   *    HTTP/1.1 200 OK
@@ -834,7 +891,7 @@
   * @apiSuccess (Response Fields) {DateTimeString} job.finished_at ISO 8601 date-time string representing when the live stream was stopped
   * @apiSuccess (Response Fields) {String} job.id The live job id
   * @apiSuccess (Response Fields) {Boolean} job.privacy `TODO`
-  * @apiSuccess (Response Fields) {String} job.state The current state of the job
+  * @apiSuccess (Response Fields) {String} job.state The current state of the job - possible values for Live jobs are `standby`, `waiting`, `processing`, `disconnected`. `finishing`, `finished`, `cancelling`, `cancelled`, `failed`; possible values for VOD jobs are `waiting_finish_live`, `waiting`, `processing`, `creating_asset`, `cancelling`, `cancelled`, `finished`, `failed`
   * @apiSuccess (Response Fields) {DateTimeString} job.submitted_at ISO 8601 date-time string representing when the job was submitted
   * @apiSuccess (Response Fields) {Boolean} job.test `TODO`
   * @apiSuccess (Response Fields) {DateTimeString} job.updated_at ISO 8601 date-time string representing when the job was last modified

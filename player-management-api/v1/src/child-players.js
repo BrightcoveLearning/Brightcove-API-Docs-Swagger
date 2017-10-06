@@ -18,7 +18,7 @@
  * @apiParamExample {curl} curl Statement:
  * curl \
  *   --header "Content-Type: application/json" \
- *   --user $EMAIL \
+ *   --user :email \
  *   --request GET \
  *   https://players.api.brightcove.com/v1/accounts/$ACCOUNT_ID/players/$PLAYER_ID/embeds/$EMBED_ID
  *
@@ -123,7 +123,7 @@
  * @apiParamExample {curl} curl Statement:
  * curl \
  *   --header "Content-Type: application/json" \
- *   --user $EMAIL \
+ *   --user :email \
  *   --request GET \
  *   https://players.api.brightcove.com/v1/accounts/:account_id/players/:player_id/embeds
  *
@@ -310,32 +310,28 @@
  * //This curl statement creates an embed that uses a Video Cloud asset
  * curl \
  *   --header "Content-Type: application/json" \
- *   --user $EMAIL \
+ *   --user :email \
  *   --request POST \
  *   --data '{
  *       "name": "MySampleEmbedPlayer2",
- *       "configuration": {
- *         "video_cloud": {
- *           "video": "4443311217001"
- *         }
+ *       "video_cloud": {
+ *         "video": "4443311217001"
  *       }
  *     }' \
  *     https://players.api.brightcove.com/v1/accounts/:account_id/players/:player_id/embeds
  *
- * //This curl statement creates an embed that uses a video asset from a URL (Perform customer)
+ * //This curl statement creates an embed that uses a video asset from a URL (standalone Brightcove Player customer)
  * curl \
  *   --header "Content-Type: application/json" \
- *   --user $EMAIL \
+ *   --user :email \
  *   --request POST \
  *   --data '{
  *       "name": "MySampleEmbedPlayer3",
- *       "configuration": {
- *         "media": {
- *           "sources": [{
- *             "src":"http://solutions.brightcove.com/bcls/assets/videos/Tiger.mp4",
- *             "type":"video/mp4"
- *           }]
- *         }
+ *       "media": {
+ *         "sources": [{
+ *           "src":"http://solutions.brightcove.com/bcls/assets/videos/Tiger.mp4",
+ *           "type":"video/mp4"
+ *         }]
  *       }
  *     }' \
  *     https://players.api.brightcove.com/v1/accounts/:account_id/players/:player_id/embeds
@@ -382,7 +378,7 @@
  * @apiParamExample {curl} curl Statement:
  * curl \
  *   --header "Content-Type: application/json" \
- *   --user $EMAIL \
+ *   --user :email \
  *   --request POST \
  *   --data '{
  *     "comment": "Comment for GitHub repo"
@@ -422,7 +418,7 @@
  * @apiParamExample {curl} curl Statement:
  * curl \
  *   --header "Content-Type: application/json" \
- *   --user $EMAIL \
+ *   --user :email \
  *   --request DELETE \
  *   --data '{}' \
  *   https://players.api.brightcove.com/v1/accounts/:account_id/players/:player_id/embeds/:embed_id

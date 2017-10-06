@@ -122,7 +122,7 @@
  * @apiParam (URL Parameters) {String} origin_account_ids list of account ids
  *
  * @apiParamExample {Url} Create Credentials Example:
- *    https://oauth.brightcove.com/v3/client_credentials?origin_account_ids=57838016001,20318290001
+ *    https://oauth.brightcove.com/v4/client_credentials?origin_account_ids=57838016001,20318290001
  *
  * @apiSuccess (Response Fields) {String} name credential name
  * @apiSuccess (Response Fields) {String} name_html html version of credential name
@@ -233,7 +233,7 @@
  * @apiParam (URL Parameters) {String} origin_account_ids list of account ids
  *
  * @apiParamExample {Url} Create Credentials Example:
- *    https://oauth.brightcove.com/v3/client_credentials/1fa5f786-3418-4a69-8b78-6772f283d838
+ *    https://oauth.brightcove.com/v4/client_credentials/1fa5f786-3418-4a69-8b78-6772f283d838
  *
  * @apiSuccess (Response Fields) {String} name credential name
  * @apiSuccess (Response Fields) {String} name_html html version of credential name
@@ -310,7 +310,7 @@
  * @apiDescription Update a client credential
  *
  * @apiHeader {String} Content-Type Content-Type: application/json
- * @apiHeader {String} Authorization Authorization: BC_TOKEN your_BC_TOKEN (see [Get BC_TOKEN](https://support.brightcove.com/node/17924#steps))
+ * @apiHeader {String} Authorization Authorization: BC_TOKEN your_BC_TOKEN (see [Get BC_TOKEN](https://support.brightcove.com/oauth-get-client-credentials-using-curl#steps))
  *
  * @apiParam (Path Parameters) {String} client_id client id for the credential
  *
@@ -411,7 +411,7 @@
  * @apiParam (Path Parameters) {String} client_id client id for the credential
  *
  * @apiParamExample {Url} Create Credentials Example:
- *    https://oauth.brightcove.com/v3/client_credentials/b744071a-3dc6-4e2a-9a8a-50beca8cf53f
+ *    https://oauth.brightcove.com/v4/client_credentials/b744071a-3dc6-4e2a-9a8a-50beca8cf53f
  *
  *
  * @apiSuccessExample {json} Success Response:
