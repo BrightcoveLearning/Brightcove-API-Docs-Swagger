@@ -1,6 +1,6 @@
 {
   "swagger": "3.0",
   "info": {
-    
+    "title": "Brightcove CMS API"
   }
 }
