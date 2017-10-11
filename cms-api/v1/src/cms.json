@@ -1,7 +1,7 @@
 {
   "servers": [
     {
-      "url": "String"
+      "url": "https://cms.api.brightcove.com/v1"
     }
   ],
   "swagger": "3.0",
