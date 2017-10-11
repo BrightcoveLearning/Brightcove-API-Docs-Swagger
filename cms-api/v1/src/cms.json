@@ -36,14 +36,12 @@
       },
       "qParam": {
         "schema": {
-          "type": "integer",
-          "default": 0,
-          "minimum": 0
+          "type": "string",
         },
         "required": false,
-        "description": "Search string - see search guide for details",
+        "description": "Search string - see [Videos Search](https://support.brightcove.com/cmsplayback-api-videos-search) for details",
         "in": "query",
-        "name": "limit"
+        "name": "q"
       },
       "sortParam": {
         "schema": {
