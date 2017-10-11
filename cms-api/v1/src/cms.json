@@ -13,7 +13,15 @@
   "components": {
     "schemas": {
       "video": {
-        
+        "name": {
+          "type": "String"
+        },
+        "id": {
+          "type": "String"
+        },
+        "account_id": {
+          "type": "String"
+        }
       }
     },
     "parameters": {
