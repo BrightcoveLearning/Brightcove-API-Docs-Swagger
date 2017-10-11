@@ -1,4 +1,30 @@
 {
+  "components": {
+    "parameters": {
+      "limitParam": {
+        "schema": {
+          "default": 20,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "required": false,
+        "description": "Maximum number of items to return",
+        "in": "query",
+        "name": "limit"
+      },
+      "offsetParam": {
+        "schema": {
+          "type": "integer",
+          "default": 0,
+          "minimum": 0
+        },
+        "required": false,
+        "description": "Maximum number of items to return",
+        "in": "query",
+        "name": "limit"
+      }
+    }
+  },
   "servers": [
     {
       "url": "https://cms.api.brightcove.com/v1"
