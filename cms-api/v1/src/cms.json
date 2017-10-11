@@ -11,6 +11,11 @@
     }
   ],
   "components": {
+    "schemas": {
+      "video": {
+        
+      }
+    },
     "parameters": {
       "account_idParam": {
         "schema": {
@@ -126,7 +131,7 @@
       },
       "qParam": {
         "schema": {
-          "type": "string",
+          "type": "string"
         },
         "required": false,
         "description": "Search string - see [Videos Search](https://support.brightcove.com/cmsplayback-api-videos-search) and [Playlist Search](https://support.brightcove.com/cms-api-playlists-search) for details",
