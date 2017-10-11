@@ -12,6 +12,33 @@
   ],
   "components": {
     "parameters": {
+      "account_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "Video Cloud account id",
+        "in": "path",
+        "name": "account_id"
+      },
+      "video_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "A Video Cloud video id",
+        "in": "path",
+        "name": "video_id"
+      },
+      "playlist_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "A Video Cloud playlist id",
+        "in": "path",
+        "name": "playlist_id"
+      },
       "limitParam": {
         "schema": {
           "default": 20,
