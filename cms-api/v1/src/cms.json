@@ -48,6 +48,60 @@
         "in": "path",
         "name": "playlist_id"
       },
+      "channel_nameParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "A Video Cloud channel name for media sharing",
+        "in": "path",
+        "name": "channel_name"
+      },
+      "affiliate_account_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "A Video Cloud affiliate account id for media sharing",
+        "in": "path",
+        "name": "affiliate_account_id"
+      },
+      "master_account_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "A Video Cloud master account id for media sharing",
+        "in": "path",
+        "name": "master_account_id"
+      },
+      "asset_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "ID for a video asset",
+        "in": "path",
+        "name": "asset_id"
+      },
+      "folder_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "Video Cloud folder id",
+        "in": "path",
+        "name": "folder_id"
+      },
+      "subscription_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "CMS API notifications subscription id",
+        "in": "path",
+        "name": "subscription_id"
+      },
       "limitParam": {
         "schema": {
           "default": 20,
