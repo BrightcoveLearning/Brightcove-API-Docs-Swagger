@@ -30,6 +30,15 @@
         "in": "path",
         "name": "video_id"
       },
+      "reference_idParam": {
+        "schema": {
+          "type": "string"
+        },
+        "required": false,
+        "description": "A Video Cloud video reference id",
+        "in": "path",
+        "name": "reference_id"
+      },
       "playlist_idParam": {
         "schema": {
           "type": "string"
