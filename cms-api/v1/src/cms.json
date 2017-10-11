@@ -1,4 +1,15 @@
 {
+  "swagger": "3.0",
+  "info": {
+    "version": "v1",
+    "description": "Reference for the Brightcove CMS API, used to access and manage your media library. To test API requests, you can use our [API Testing Tools](https://support.brightcove.com/developer-tools-and-concepts). For permissions needed for OAuth credentials, see [API Operations](https://support.brightcove.com/api-operations-client-credentials-requests).",
+    "title": "Brightcove CMS API"
+  },
+  "servers": [
+    {
+      "url": "https://cms.api.brightcove.com/v1"
+    }
+  ],
   "components": {
     "parameters": {
       "limitParam": {
@@ -19,21 +30,32 @@
           "minimum": 0
         },
         "required": false,
-        "description": "Maximum number of items to return",
+        "description": "Number of items to skip",
+        "in": "query",
+        "name": "limit"
+      },
+      "sortParam": {
+        "schema": {
+          "enum": [
+            "name",
+            "reference_id",
+            "created_at",
+            "published_at",
+            "updated_at",
+            "schedule_starts_at",
+            "schedule_ends_at",
+            "state",
+            "plays_total",
+            "plays_trailing_week"
+          ],
+          "default": "updated_at",
+          "type": "string"
+        },
+        "required": false,
+        "description": "Field to use to sort items",
         "in": "query",
         "name": "limit"
       }
     }
-  },
-  "servers": [
-    {
-      "url": "https://cms.api.brightcove.com/v1"
-    }
-  ],
-  "swagger": "3.0",
-  "info": {
-    "version": "v1",
-    "description": "Reference for the Brightcove CMS API, used to access and manage your media library. To test API requests, you can use our [API Testing Tools](https://support.brightcove.com/developer-tools-and-concepts). For permissions needed for OAuth credentials, see [API Operations](https://support.brightcove.com/api-operations-client-credentials-requests).",
-    "title": "Brightcove CMS API"
   }
 }
