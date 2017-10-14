@@ -14,44 +14,44 @@
     "schemas": {
       "video": {
         "name": {
-          "type": "String"
+          "type": "string"
         },
         "id": {
-          "type": "String"
+          "type": "string"
         },
         "account_id": {
-          "type": "String"
+          "type": "string"
         },
         "ad_keys": {
-          "type": "String"
+          "type": "string"
         },
         "clip_souce_video_id": {
-          "type": "String"
+          "type": "string"
         },
         "cue_points": [
           {
             "id": {
-              "type": "String"
+              "type": "string"
             },
             "force_stop": {
-              "type": "Boolean"
+              "type": "boolean"
             },
             "metadata": {
-              "type": "String"
+              "type": "string"
             },
             "name": {
-              "type": "String"
+              "type": "string"
             },
             "time": {
               "type": "number"
             },
             "type": {
-              "type": "String"
+              "type": "string"
             }
           }
         ],
         "custom_fields": {
-          "type": "String"
+          "type": "string"
         }
       }
     },
