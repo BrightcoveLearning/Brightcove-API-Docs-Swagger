@@ -1,14 +1,20 @@
 {
-  "swagger": "3.0",
+  "swagger": "2.0",
   "info": {
     "version": "v1",
     "description": "Reference for the Brightcove CMS API, used to access and manage your media library. To test API requests, you can use our [API Testing Tools](https://support.brightcove.com/developer-tools-and-concepts). For permissions needed for OAuth credentials, see [API Operations](https://support.brightcove.com/api-operations-client-credentials-requests).",
     "title": "Brightcove CMS API"
   },
-  "servers": [
-    {
-      "url": "https://cms.api.brightcove.com/v1"
-    }
+  "host": "https://cms.api.brightcove.com",
+  "basePath":"/v1",
+  "schemes": [
+      "https"
+  ],
+  "consumes": [
+      "application/json"
+  ],
+  "produces": [
+      "application/json"
   ],
   "components": {
     "schemas": {
