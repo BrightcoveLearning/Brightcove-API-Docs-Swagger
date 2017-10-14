@@ -14,12 +14,15 @@
     "schemas": {
       "video": {
         "name": {
+          "required": true,
           "type": "string"
         },
         "id": {
+          "readOnly": true,
           "type": "string"
         },
         "account_id": {
+          "readOnly": true,
           "type": "string"
         },
         "ad_keys": {
