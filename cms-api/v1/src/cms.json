@@ -24,6 +24,34 @@
         },
         "ad_keys": {
           "type": "String"
+        },
+        "clip_souce_video_id": {
+          "type": "String"
+        },
+        "cue_points": [
+          {
+            "id": {
+              "type": "String"
+            },
+            "force_stop": {
+              "type": "Boolean"
+            },
+            "metadata": {
+              "type": "String"
+            },
+            "name": {
+              "type": "String"
+            },
+            "time": {
+              "type": "number"
+            },
+            "type": {
+              "type": "String"
+            }
+          }
+        ],
+        "custom_fields": {
+          "type": "String"
         }
       }
     },
