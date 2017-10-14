@@ -21,6 +21,9 @@
         },
         "account_id": {
           "type": "String"
+        },
+        "ad_keys": {
+          "type": "String"
         }
       }
     },
